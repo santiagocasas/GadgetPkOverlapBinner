@@ -9,15 +9,12 @@ from scipy import interpolate
 import tools
 
 Base = '../' 
-binfolderList=['/binned-new/']
+binfolderList=['/binned/']
 #simname=str(sys.argv[0])
 
-#list_of_sims = ['LCDM', 'EXP001']
-#snapshots = [92,56,41,35]
-#list_of_reds = ['_z_000','_z_055','_z_100','_z_161']
-list_of_sims = ['LCDM']
-snapshots = [92,56]
-list_of_reds = ['z=0','z=0.55']
+list_of_sims = ['GR', 'F5']
+snapshots = [175,400]
+list_of_reds = ['z=1.0','z=0.0']
 list_particles = ['_']
 #fill the snapshot numbers with zeros, to match filenames
 list_snaps = [str(snap).zfill(3) for snap in snapshots ]
@@ -31,13 +28,13 @@ simu_set = len(list_of_sims)
 
 #choose which file to plot
 #simulation index
-simindx=0
+simindx=1
 #snapshot (redshift) index
 snaindx=1
 
 #choose data and labels
 list_of_files_and_labels = (Base+list_of_sims[simindx]+binfolderList[0]+list_of_sims[simindx]+list_particles[0]+str(list_snaps[snaindx])+'.txt', 
-        'CoDECS '+pklabels[pkindex]+' '+list_of_sims[simindx]+' '+list_of_reds[snaindx])
+        'Gadget '+pklabels[pkindex]+' '+list_of_sims[simindx]+' '+list_of_reds[snaindx])
 
 datalist = [np.loadtxt(list_of_files_and_labels[0])[:,(0,pkindex)], list_of_files_and_labels[1]]
 

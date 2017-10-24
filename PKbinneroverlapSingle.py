@@ -11,8 +11,8 @@ from pkbinner import *
 Base = './'  
 #list_of_sims = ['LCDM','EXP001','EXP002','EXP003']
 #snapshots = [92,56,41,35]
-snapshots = [92,56]
-list_of_sims = ['LCDM']
+snapshots = [175,400]
+list_of_sims = ['GR', 'F5']
 simu_set = len(list_of_sims)
 counter = 0
 list_snaps = [str(snap).zfill(3) for snap in snapshots ]
@@ -20,14 +20,13 @@ list_snaps = [str(snap).zfill(3) for snap in snapshots ]
 #list_particles = ['_type0_','_type1_','_']
 list_particles = ['_']
 #list_output =    ['_CoDECS_power_baryons_','_CoDECS_power_CDM_','_CoDECS_power_all_']
-list_output =    ['_CoDECS_power_all_']
 
-newBin = '/binned-new/'
+newBin = '/binned/'
 
 bestparsfile='bestOverlapParams.txt'
 
 
-fnames_list = [[[Base+simName+'/powerspec'+part+exts+'.txt' for part in list_particles] for exts in list_snaps] for simName in list_of_sims]
+fnames_list = [[[Base+simName+'/powerspec'+part+simName+part+exts+'.txt' for part in list_particles] for exts in list_snaps] for simName in list_of_sims]
 
 print("chosen names of files ")
 print(fnames_list)
@@ -117,20 +116,3 @@ for isi, simu in enumerate(list_of_sims):
 
 print 'Finished'
 
-
-        
-            
-            
-      
-      
-      
-      
-      
-      
-      
-    
-    
-    
-  
-  
-  
