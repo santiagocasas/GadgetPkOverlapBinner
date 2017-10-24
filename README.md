@@ -11,16 +11,17 @@ To test if code is working, run in this order:
      python Plots/plot.PowerSpectra.py
      python Plots/plot.ManyPowerSpectra.py
 
-pkbinner.py:
+    pkbinner.py:
     contains the needed functions for this. (Inspired in the original IDL script)
 
-PKbinneroverlapSingle.py:
+    PKbinneroverlapSingle.py:
     performs the binning and overlapping for the given set of parameters (at the top of the file) or it can also read parameters from the bestOverlapParams.txt
 
-PKbinneroverlapRatioOptimizer.py:
+    PKbinneroverlapRatioOptimizer.py:
     performs the binning on two sets of simulation models (model L and model E) for each redshift (snapshot number), changing the parameters of the overlapping, such that the ratio of power spectra E/L has the smoothest derivative possible. The set of parameters which perform the best are saved on a file bestOverlapParams.txt
 
 Plot routines:
+    
     tools.py: some tools for ratios and derivatives
     
     plot.PowerSpectra.py:  performs the log-log plot on a single power spectrum specified through the simulation and snapshot index.
@@ -33,6 +34,8 @@ Folder names and simulation snapshots can be also changed in the files themselve
 Acknowledgments:
 
 This script was done for my Master thesis at the University of Heidelberg, under the supervision of Prof. Luca Amendola and Dr. Marco Baldi. It was used for the publication: Fitting and forecasting coupled dark energy in the non-linear regime, JCAP 1601 (2016) no.01, 045, e-Print: arXiv:1508.07208 [astro-ph.CO].
+
+The data in this repository comes from the CoDECS database of cosmological simulations: http://www.marcobaldi.it/web/CoDECS_summary.html
 
 The script is inspired on the original IDL scripts used in Gadget2. Thanks also to Prof. Volker Springel for useful comments.
  
