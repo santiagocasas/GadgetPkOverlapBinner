@@ -57,7 +57,7 @@ intekind = 'linear'   #interpolation methods: 'linear','nearest', 'zero', 'sline
 #*******************#
 
 # list of parameters to explore in the loop. The parameters that minimize the oscillations of the derivatives of the ratio, are taken.
-ndiscard_B_test_arra=[3,4,5]
+ndiscard_B_test_arra=[2,3,4,5]
 ncut_A_test_arra=[3,4,5]
 swidth_test_arra=[3,4,5]
 
