@@ -1,3 +1,10 @@
+#specific folders to ignore
+LCDM/bin*/
+EXP001/bin*/
+best*.txt
+Plots/*.png
+Plots/*.pdf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
