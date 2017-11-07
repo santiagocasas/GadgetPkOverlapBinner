@@ -12,6 +12,7 @@ Base = '../'
 binfolderList=['/binned-optim-ratio/']
 #simname=str(sys.argv[0])
 
+simustri="MGGadget"
 #list_of_sims = ['LCDM', 'EXP001']
 #snapshots = [92,56,41,35]
 #list_of_reds = ['_z_000','_z_055','_z_100','_z_161']
@@ -39,7 +40,7 @@ snaindex=[0,1]
 locpks=list_of_sims[1]
 
 list_of_files_and_labels = [[(Base+locpks+binfolderList[0]+list_of_sims[sim]+list_particles[0]+str(list_snaps[sna])+'.txt', 
-        'MGGadget '+pklabels[pkindex]+' '+list_of_sims[1]+'/'+list_of_sims[0]+' '+list_of_reds[sna]) for sna in snaindex] for sim in simindex]
+        simustri+' '+pklabels[pkindex]+' '+list_of_sims[1]+'/'+list_of_sims[0]+' '+list_of_reds[sna]) for sna in snaindex] for sim in simindex]
 
 datalist = [[[np.loadtxt(list_of_files_and_labels[sim][sna][0])[:,(0,pkindex)], list_of_files_and_labels[sim][sna][1]] for sna in snaindex] for sim in simindex]
 

@@ -164,7 +164,7 @@ def rawPowers(simuNums,fnames_list, minModeCountA=25, minModeCountB=25, targetBi
 
 
 
-def overlapPS(SimuPSArray,ndiscB,ncutA,swidth,intekind,shotthreshold=0.10,fullout='False'):
+def overlapPS(SimuPSArray,ndiscB,ncutA,swidth,intekind,shotthreshold=0.10,fullout='False', unitsfactor=1):
     threshot = shotthreshold     
     Delta2_list_A = np.copy(SimuPSArray[0])
     K_list_A = np.copy(SimuPSArray[1])    
@@ -214,8 +214,7 @@ def overlapPS(SimuPSArray,ndiscB,ncutA,swidth,intekind,shotthreshold=0.10,fullou
     Delta2_list_all = Delta2_list_all[(shotList/Delta2_list_all) < threshot]
     
     # convert to units of h/Mpc and calculate P(k) from D2(k)
-    #K_list_all3 = 1.0e03*K_list_all
-    K_list_all3 = K_list_all
+    K_list_all3 = unitsfactor*K_list_all
     Pk_all      = 2.0*np.pi*np.pi*Delta2_list_all/np.power(K_list_all3, 3)
     krange = (max(K_list_AB) - min(K_list_AB))
     minmaxOverlap = (1000*min(K_list_AB),1000*max(K_list_AB),1000*krange)

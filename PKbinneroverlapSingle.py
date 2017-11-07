@@ -31,6 +31,10 @@ fnames_list = [[[Base+simName+'/powerspec'+part+simName+part+exts+'.txt' for par
 print("chosen names of files ")
 print(fnames_list)
 
+#____#
+#Units
+unitsfact=1  #  MGGadget files have k in h/Mpc
+
 #__________________#
 # Binning parameters
 # These are the default values specified in the function rawPowers.
@@ -85,7 +89,7 @@ for isi, simu in enumerate(list_of_sims):
                         elif (fparstest==True & countf==0):
                             print "Simulation numbers and/or snapshots in best parameters file do not match present settings."
             
-            Delta2_all, K_all, Pk_all, K_list_A, Delta2_list_A, K_list_B, Delta2_list_B = overlapPS(PSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=True)
+            Delta2_all, K_all, Pk_all, K_list_A, Delta2_list_A, K_list_B, Delta2_list_B = overlapPS(PSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=True, unitsfactor=unitsfact)
             
             
 
