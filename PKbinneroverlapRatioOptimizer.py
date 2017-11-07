@@ -34,6 +34,9 @@ fnames_list = [[[Base+simName+'/powerspec'+part+exts+'.txt' for part in list_par
 print("chosen names of files ")
 print(fnames_list)
 
+#____#
+#Units
+unitsfact=1000  # Codecs files have k in h/kpc
 
 
 #__________________#
@@ -88,8 +91,8 @@ for j, snap in enumerate(list_snaps):
                 for ncut_A in ncut_A_test_arra:
                     for swidth in swidth_test_arra: 
                         
-                        LD2_all, LK_all, LminMax = overlapPS(LPSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=False)
-                        ED2_all, EK_all, EminMax = overlapPS(EPSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=False)
+                        LD2_all, LK_all, LminMax = overlapPS(LPSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=False, unitsfactor=unitsfact)
+                        ED2_all, EK_all, EminMax = overlapPS(EPSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=False, unitsfactor=unitsfact)
                         
                         LSimuData = np.transpose([LK_all,LD2_all])
                         ESimuData = np.transpose([EK_all,ED2_all])
@@ -119,8 +122,8 @@ for j, snap in enumerate(list_snaps):
             fpars.write(str(list_of_sims[0])+" "+str(bestSimuSnapParams[1])+" "+"ndiscardB="+str(bestSimuSnapParams[2])+" "+"ncutA="+str(bestSimuSnapParams[3])+" "+"smoothwidth="+str(bestSimuSnapParams[4])+" "+"maxChi="+str(bestSimuSnapParams[5])+"\n")
             
             #applying the best (optimal) parameters to the raw unbinned power spectra
-            LD2_all_best, LK_all_best, LPk_all, LK_list_A, LDelta2_list_A, LK_list_B, LDelta2_list_B = overlapPS(LPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True)
-            ED2_all_best, EK_all_best, EPk_all, EK_list_A, EDelta2_list_A, EK_list_B, EDelta2_list_B = overlapPS(EPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True)
+            LD2_all_best, LK_all_best, LPk_all, LK_list_A, LDelta2_list_A, LK_list_B, LDelta2_list_B = overlapPS(LPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
+            ED2_all_best, EK_all_best, EPk_all, EK_list_A, EDelta2_list_A, EK_list_B, EDelta2_list_B = overlapPS(EPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
             #filling arrays with zeros, in order to save all columns to a file
             colsize=len(LD2_all_best)
             LK_list_A = zerofill(LK_list_A,colsize)
