@@ -74,15 +74,15 @@ fpars = open(bestparamsfile,'w+')
 
 for j, snap in enumerate(list_snaps):
     simuL = [0,j,0]
-    LDelta_A, LK_A, LDelta_B, LK_B, LShotf = rawPowers(simuL,fnames_list)
-    LPSArra = [LDelta_A, LK_A, LDelta_B, LK_B, LShotf]
+    LDelta_A, LK_A, LDelta_B, LK_B, LShotf, LcountA, LcountB = rawPowers(simuL,fnames_list)
+    LPSArra = [LDelta_A, LK_A, LDelta_B, LK_B, LShotf, LcountA, LcountB]
     #L is the baseline simulation. Spectra from simulation E will be divided by L and the ratio will be optimized. 
     for isi, simu in enumerate(list_of_sims[1:]):
         for k, part in enumerate(list_particles):
             
             simuE = [(isi+1),j,k]
-            EDelta_A, EK_A, EDelta_B, EK_B, EShotf = rawPowers(simuE,fnames_list)
-            EPSArra = [EDelta_A, EK_A, EDelta_B, EK_B, EShotf]       
+            EDelta_A, EK_A, EDelta_B, EK_B, EShotf, EcountA, EcountB = rawPowers(simuE,fnames_list)
+            EPSArra = [EDelta_A, EK_A, EDelta_B, EK_B, EShotf, EcountA, EcountB]       
             
             # parameters for loop minimization of estimator
             maxChi = 1000
@@ -121,8 +121,8 @@ for j, snap in enumerate(list_snaps):
             fpars.write(str(list_of_sims[0])+" "+str(bestSimuSnapParams[1])+" "+"ndiscardB="+str(bestSimuSnapParams[2])+" "+"ncutA="+str(bestSimuSnapParams[3])+" "+"smoothwidth="+str(bestSimuSnapParams[4])+" "+"maxChi="+str(bestSimuSnapParams[5])+"\n")
             
             #applying the best (optimal) parameters to the raw unbinned power spectra
-            LD2_all_best, LK_all_best, LPk_all, LK_list_A, LDelta2_list_A, LK_list_B, LDelta2_list_B = overlapPS(LPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
-            ED2_all_best, EK_all_best, EPk_all, EK_list_A, EDelta2_list_A, EK_list_B, EDelta2_list_B = overlapPS(EPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
+            LD2_all_best, LK_all_best, LPk_all, Lcount_all, LK_list_A, LDelta2_list_A, Lcount_A, LK_list_B, LDelta2_list_B, Lcount_B, Lshot_list = overlapPS(LPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
+            ED2_all_best, EK_all_best, EPk_all, Ecount_all, EK_list_A, EDelta2_list_A, Ecount_A, EK_list_B, EDelta2_list_B, Ecount_B, Eshot_list = overlapPS(EPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
             #filling arrays with zeros, in order to save all columns to a file
             colsize=len(LD2_all_best)
             LK_list_A = zerofill(LK_list_A,colsize)
@@ -153,13 +153,13 @@ for j, snap in enumerate(list_snaps):
             
             #saving extra information to Pk files (for LCDM simulation)
             fiL = open(outfileL, 'a+')
-            fiL.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16))
+            fiL.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'modeCount(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'modeCountA(k)'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16)+'modeCountB(k)'.center(16)+'ShotNoise(k)'.center(16))
             fiL.write('\n'+'# params: '+'ndiscardB='+str(bestSimuSnapParams[2])+" ncutA="+str(bestSimuSnapParams[3])+" smoothwidth="+str(bestSimuSnapParams[4]))
             fiL.close()
             
             #another pythonic  way of saving extra information to Pk files (for EXP simulation)
             with open(outfileE, 'a+') as fiE:
-                fiE.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16))
+                fiE.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'modeCount(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'modeCountA(k)'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16)+'modeCountB(k)'.center(16)+'ShotNoise(k)'.center(16))
                 fiE.write('\n'+'# params: '+'ndiscardB='+str(bestSimuSnapParams[2])+" ncutA="+str(bestSimuSnapParams[3])+" smoothwidth="+str(bestSimuSnapParams[4]))
             
     
