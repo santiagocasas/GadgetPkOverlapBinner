@@ -125,19 +125,25 @@ for j, snap in enumerate(list_snaps):
             LD2_all_best, LK_all_best, LPk_all, Lcount_all, LK_list_A, LDelta2_list_A, Lcount_A, LK_list_B, LDelta2_list_B, Lcount_B, Lshot_list = overlapPS(LPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
             ED2_all_best, EK_all_best, EPk_all, Ecount_all, EK_list_A, EDelta2_list_A, Ecount_A, EK_list_B, EDelta2_list_B, Ecount_B, Eshot_list = overlapPS(EPSArra,bestSimuSnapParams[2],bestSimuSnapParams[3],bestSimuSnapParams[4],intekind,shotthreshold=thre_shot,fullout=True, unitsfactor=unitsfact)
             #filling arrays with zeros, in order to save all columns to a file
+            
             colsize=len(LD2_all_best)
             LK_list_A = zerofill(LK_list_A,colsize)
+            Lcount_A = zerofill(Lcount_A,colsize)
             LDelta2_list_A = zerofill(LDelta2_list_A,colsize)
             LK_list_B = zerofill(LK_list_B,colsize)
+            Lcount_B = zerofill(Lcount_B,colsize)
             LDelta2_list_B = zerofill(LDelta2_list_B,colsize)
+            
             colsize=len(ED2_all_best)
             EK_list_A = zerofill(EK_list_A,colsize)
+            Ecount_A = zerofill(Ecount_A,colsize)
             EDelta2_list_A = zerofill(EDelta2_list_A,colsize)
             EK_list_B = zerofill(EK_list_B,colsize)
+            Ecount_B = zerofill(Ecount_B,colsize)
             EDelta2_list_B = zerofill(EDelta2_list_B,colsize)
             
-            DataOutputL = np.column_stack((LK_all_best, LPk_all, LD2_all_best, LK_list_A, LDelta2_list_A, LK_list_B, LDelta2_list_B))
-            DataOutputE = np.column_stack((EK_all_best, EPk_all, ED2_all_best, EK_list_A, EDelta2_list_A, EK_list_B, EDelta2_list_B))
+            DataOutputL = np.column_stack((LK_all_best, LPk_all, LD2_all_best, Lcount_all, LK_list_A, LDelta2_list_A, Lcount_A, LK_list_B, LDelta2_list_B, Lcount_B, Lshot_list))
+            DataOutputE = np.column_stack((EK_all_best, EPk_all, ED2_all_best, Ecount_all, EK_list_A, EDelta2_list_A, Ecount_A, EK_list_B, EDelta2_list_B, Ecount_B, Eshot_list))
             
             mkdirp(Base+simu+newBin)
             
