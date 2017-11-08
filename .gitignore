@@ -2,6 +2,8 @@
 LCDM/bin*/
 EXP001/bin*/
 best*.txt
+GR/bin*/
+F5/bin*/
 Plots/*.png
 Plots/*.pdf
 
