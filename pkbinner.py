@@ -158,9 +158,11 @@ def rawPowers(simuNums,fnames_list, minModeCountA=25, minModeCountB=25, targetBi
     
     DA = np.copy(Delta2_list_A)
     KA = np.copy(K_list_A)
+    countA = np.copy(count_list_A)
     KB = np.copy(K_list_B)
     DB = np.copy(Delta2_list_B)
-    return DA, KA, DB, KB, shotFunc
+    countB = np.copy(count_list_B)
+    return DA, KA, DB, KB, shotFunc, countA, countB
 
 
 
@@ -171,15 +173,19 @@ def overlapPS(SimuPSArray,ndiscB,ncutA,swidth,intekind,shotthreshold=0.10,fullou
     Delta2_list_B = np.copy(SimuPSArray[2])
     K_list_B = np.copy(SimuPSArray[3])
     shotFunc =  SimuPSArray[4]
+    count_list_A = SimuPSArray[5]
+    count_list_B = SimuPSArray[6]
     
     # discard last ndiscard_B entries of top level mesh
     K_list_B = K_list_B[:-ndiscB]
+    count_list_B = count_list_B[:-ndiscB]
     Delta2_list_B = Delta2_list_B[:-ndiscB]    
     
     # leave only the desired entries from the folded mesh at the end of overlap region
     ind_A = np.where( K_list_A >= max(K_list_B) )[0]                 
     cutK = min(ind_A)-ncutA 
     K_list_A = K_list_A[cutK:]
+    count_list_A = count_list_A[cutK:]
     Delta2_list_A = Delta2_list_A[cutK:]           
     nA = len(K_list_A)
     nnA = len(ind_A)
@@ -195,35 +201,45 @@ def overlapPS(SimuPSArray,ndiscB,ncutA,swidth,intekind,shotthreshold=0.10,fullou
     
     # we smooth the power with an uniform filter of size swidth
     Delta2_list_A = ndimage.filters.uniform_filter(Delta2_list_A, size=swidth)
+    count_list_A = ndimage.filters.uniform_filter(count_list_A, size=swidth)
     
     # we create an interpolated function of Delta2A in the range KA
     fInterpDA = interpolate.interp1d(K_list_A, Delta2_list_A, kind=intekind)
+    fInterpCountA = interpolate.interp1d(K_list_A, count_list_A, kind=intekind)
     
     # we overlap the top level and the folded powers according to a linear weight      
     linweight =     np.linspace(0,1,nnB)
     linweightcomp = 1-np.linspace(0,1,nnB)
     Delta2_list_AB1 = linweight*fInterpDA(K_list_AB)+linweightcomp*Delta2_list_B[ind_AB]
+    count_list_AB1 = linweight*fInterpCountA(K_list_AB)+linweightcomp*count_list_B[ind_AB]
     
     # now we put together: the top level the overlapped and the folded mesh
     K_list_all = np.concatenate((K_list_B0,K_list_AB,K_list_A3))                        
     Delta2_list_all = np.concatenate((Delta2_list_B[(K_list_B <= min(K_list_A))],Delta2_list_AB1,Delta2_list_A[(K_list_A > max(K_list_B))]))
+    count_list_all = np.concatenate((count_list_B[(K_list_B <= min(K_list_A))], count_list_AB1, count_list_A[(K_list_A > max(K_list_B))]))
     
     # now we cut the power spectrum where the shot reaches a given threshold
     shotList = shotFunc(K_list_all)
     K_list_all = K_list_all[(shotList/Delta2_list_all) < threshot]
+    count_list_all = count_list_all[(shotList/Delta2_list_all) < threshot]
     Delta2_list_all = Delta2_list_all[(shotList/Delta2_list_all) < threshot]
+    shotListCut = shotFunc(K_list_all)
     
     # convert to units of h/Mpc and calculate P(k) from D2(k)
-    K_list_all3 = unitsfactor*K_list_all
-    Pk_all      = 2.0*np.pi*np.pi*Delta2_list_all/np.power(K_list_all3, 3)
+    K_list_A = unitsfactor*K_list_A
+    K_list_AB = unitsfactor*K_list_AB
+    K_list_B = unitsfactor*K_list_B
+    K_list_all = unitsfactor*K_list_all
+
+    Pk_all      = 2.0*np.pi*np.pi*Delta2_list_all/np.power(K_list_all, 3)
     krange = (max(K_list_AB) - min(K_list_AB))
-    minmaxOverlap = (1000*min(K_list_AB),1000*max(K_list_AB),1000*krange)
+    minmaxOverlap = (min(K_list_AB),max(K_list_AB),krange)
     minOv = minmaxOverlap[0]
     maxOv = minmaxOverlap[1]
     rangOv = minmaxOverlap[2]
     avOv = np.average((minmaxOverlap[0],minmaxOverlap[1]))
     if fullout==False:
-        return Delta2_list_all, K_list_all3, minmaxOverlap
+        return Delta2_list_all, K_list_all, minmaxOverlap
     elif fullout==True:
-        return Delta2_list_all, K_list_all3, Pk_all, K_list_A, Delta2_list_A, K_list_B, Delta2_list_B
+        return Delta2_list_all, K_list_all, Pk_all, count_list_all, K_list_A, Delta2_list_A, count_list_A,  K_list_B, Delta2_list_B, count_list_B, shotListCut
 

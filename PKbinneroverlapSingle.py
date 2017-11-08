@@ -64,8 +64,8 @@ for isi, simu in enumerate(list_of_sims):
         for k, part in enumerate(list_particles):
             simuArr=[isi,j,k]
 
-            Delta_A, K_A, Delta_B, K_B, Shotf = rawPowers(simuArr,fnames_list)
-            PSArra = [Delta_A, K_A, Delta_B, K_B, Shotf] 
+            Delta_A, K_A, Delta_B, K_B, Shotf, countA, countB = rawPowers(simuArr,fnames_list)
+            PSArra = [Delta_A, K_A, Delta_B, K_B, Shotf, countA, countB] 
             
             
             
@@ -90,7 +90,7 @@ for isi, simu in enumerate(list_of_sims):
                         elif (fparstest==True & countf==0):
                             print "Simulation numbers and/or snapshots in best parameters file do not match present settings."
             
-            Delta2_all, K_all, Pk_all, K_list_A, Delta2_list_A, K_list_B, Delta2_list_B = overlapPS(PSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=True, unitsfactor=unitsfact)
+            Delta2_all, K_all, Pk_all, count_list_all, K_list_A, Delta2_list_A, count_list_A, K_list_B, Delta2_list_B, count_list_B, shot_list = overlapPS(PSArra,ndiscard_B,ncut_A,swidth,intekind,shotthreshold=thre_shot, fullout=True, unitsfactor=unitsfact)
             
             
 
@@ -99,19 +99,21 @@ for isi, simu in enumerate(list_of_sims):
             colsize=len(K_all)
             
             K_list_Afill = zerofill(K_list_A,colsize)
+            count_list_Afill = zerofill(count_list_A,colsize)
             Delta2_list_Afill = zerofill(Delta2_list_A,colsize)
+            
             K_list_Bfill = zerofill(K_list_B,colsize)
+            count_list_Bfill = zerofill(count_list_B,colsize)
             Delta2_list_Bfill = zerofill(Delta2_list_B,colsize)                              
             
-            DataOutput = np.column_stack(( K_all, Pk_all, Delta2_all, K_list_Afill, Delta2_list_Afill, K_list_Bfill, Delta2_list_Bfill ))
-            #DataOutput = np.column_stack(( K_list_all3, Delta2_list_all, Pk_all ))
+            DataOutput = np.column_stack(( K_all, Pk_all, Delta2_all, count_list_all,  K_list_Afill, Delta2_list_Afill, count_list_Afill,  K_list_Bfill, Delta2_list_Bfill, count_list_Bfill, shot_list ))
             
             mkdirp(Base+simu+newBin)
             outfileSimu = Base+simu+newBin+simu+part+snap+'.txt'
             print '...printing: ', outfileSimu            
             np.savetxt(outfileSimu, DataOutput, fmt='%15.5e')
             with open(outfileSimu, 'a+') as fiE:
-                fiE.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16))
+                fiE.write('#   '+'K in h/Mpc'.center(14)+'Power P(k)'.center(16)+'Delta2(k)'.center(16)+'modeCount(k)'.center(16)+'K_A_Cut'.center(16)+'Delta2_A_Cut'.center(16)+'modeCountA(k)'.center(16)+'K_B_Cut'.center(16)+'Delta2_B_Cut'.center(16)+'modeCountB(k)'.center(16)+'ShotNoise(k)'.center(16))
 
                 fiE.write('\n'+'# params: '+'ndiscardB='+str(ndiscard_B)+" ncutA="+str(ncut_A)+" smoothwidth="+str(swidth))
             
